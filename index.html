@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-theme.min.css"/>
+	<title>Sketch App</title>
+</head>
+
+<body>
+	<div id="sketch" class="container">
+		<div class="menu">
+			<div class="button-group">
+				<button class="btn btn-default button-group mode" id ="select">Select</button>
+				<button class="btn btn-default button-group mode" id ="freeline">Free Line</button>
+				<button class="btn btn-default button-group mode" id ="straightline">Straight Line</button>
+				<button class="btn btn-default button-group mode" id ="rect">Rectangle</button>
+				<button class="btn btn-default button-group mode" id ="ellipse">Ellipse</button>
+				<button class="btn btn-default button-group mode" id ="circle">Circle</button>
+				<button class="btn btn-default button-group mode" id ="square">Square</button>
+				<button class="btn btn-default button-group mode" id ="polygon" >Polygon</button>
+			</div>
+			<div class="button-group">
+				<div>
+					<button class="btn btn-default button-group" id = "clear">Clear</button>
+					<button class="btn btn-default button-group mode" id = "copy" >Copy</button>
+					<button class="btn btn-default button-group mode" id = "cut">Cut</button>
+					<button class="btn btn-default button-group mode" id = "paste">Paste</button>
+				</div>
+			</div>
+
+			<div class="button-group">
+				<div class="color-button-group">
+					<button class = "btn color" id="red" style="background-color:red"></button>
+					<button class = "btn color" id="orange" style="background-color:orange"></button>
+					<button class = "btn color" id="yellow" style="background-color:yellow"></button>
+					<button class = "btn color" id="green" style="background-color:green"></button>
+					<button class = "btn color"  id="blue" style="background-color:blue"></button>
+					<button class = "btn color" id="indigo" style="background-color:indigo"></button>
+					<button class = "btn color"  id="violet" style="background-color:violet"></button>
+					<button class = "btn color"  id="black" style="background-color:black"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="wrapper">
+		<!--<canvas id="myTempCanvas" width="500" height="200" style="border:1px solid #000000;"></canvas>-->
+		<canvas id="myCanvas" style="border:1px solid #000000"></canvas>
+	</div>
+
+
+</div>
+
+</body>
+<script src='jquery-1.11.2.js'></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script src="fabric.js"></script>
+<script src="main.js"></script>
+<script src="style.js"></script>
+
+</html>
