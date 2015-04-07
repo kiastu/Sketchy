@@ -74,6 +74,7 @@ $(".color").click(function(){
 });
 $("#clear").click(function(){
 	canvas.clear();
+	mode = 'add';
 });
 	//mouse clicked downwards, begin tracking movement.
 	canvas.observe('mouse:down',function(options){
@@ -144,7 +145,6 @@ $("#clear").click(function(){
 						y: pos.y
 					}], {
 						fill: color,
-						opacity: 0.5,
 						selectable: false,
 						originX: pos.x,
 						originY: pos.y
@@ -233,10 +233,18 @@ canvas.observe('mouse:move',function(options){
 			}
 			case 'square':{
 				if(currentWidth>=currentHeight){
-					currentHeight = currentWidth;
+					if(currentHeight<0 &&  currentWidth>=0){
+						currentHeight = -currentWidth;
+					}else{
+						currentHeight = currentWidth;
+					}
 
 				}else if(currentWidth<currentHeight){
-					currentWidth = currentHeight
+					if(currentWidth<0 &&  currentHeight>=0){
+						currentWidth = -currentHeight
+					}else{
+						currentWidth = currentHeight
+					}
 				}
 				if(selected!==null){
 					console.log('modifying selected object');
@@ -320,17 +328,12 @@ fabric.util.addListener(window, 'keyup', function (e) {
 				selectable: true
 			});
 			currentShape._calcDimensions(false);
-			var minX = 0,
-			minY = 0,
-			maxX = 0,
-			maxY = 0;
-			for (var i = 0; i < currentShape.points.length; i++) {
-				minX = Math.min(minX, currentShape.points[i].x);
-				minY = Math.min(minY, currentShape.points[i].y);
-				maxX = Math.max(maxX, currentShape.points[i].x);
-				maxY = Math.max(maxY, currentShape.points[i].y);
-			}
+			console.log(currentShape.getBoundingRect());
+			console.log(currentShape);
+			//currentShape.set({top:currentShape.minY,left:currentShape.minX});
+			//currentShape.set({top:currentShape.minY,left:currentShape.minX});
 			currentShape.setCoords();
+			console.log(currentShape.getBoundingRect());
 		}
 		currentShape = null;
 	}
