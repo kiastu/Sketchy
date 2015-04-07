@@ -1,3 +1,5 @@
+var canvas = new fabric.Canvas('myCanvas');
+
 $(document).ready(function() {
 	main();
 });
@@ -5,13 +7,23 @@ function main(){
 	//main function.
 	var tool='none';
 	var color='black'
-	var canvas = new fabric.Canvas('myCanvas');
+	//var canvas = new fabric.Canvas('myCanvas');
 	var pressed = false;
 	var initX,initY;
 	var state = 'create';
 	var selected=null;
-	var htmlcanvas = document.getElementById("myCanvas");
 	var copied = null;
+    window.addEventListener('resize', resizeCanvas, false);
+
+    function resizeCanvas() {
+        canvas.setHeight(window.innerHeight);
+        canvas.setWidth(window.innerWidth);
+        canvas.renderAll();
+    }
+
+    // resize on init
+    resizeCanvas();
+
 	canvas.clear();
 	$(".mode").click(function(){
 		tool = $(this).attr('id');
@@ -27,6 +39,7 @@ function main(){
 	$(".color").click(function(){
 		color=$(this).attr('id');
 		console.log("The Color selected is:", color);
+        canvas.freeDrawingBrush.color=color;
 	});
 	$("#clear").click(function(){
 		canvas.clear();
@@ -37,7 +50,7 @@ function main(){
 		var pointer = options.e;
 		initX = pointer.layerX;
 		initY = pointer.layerY;
-		canvas.isDrawingMode = false;
+		//canvas.isDrawingMode = false;
 		switch(tool){
 			case 'rect':{
 				console.log("baking rectangles at X:",initX," Y",initY, "tools", tool);
@@ -79,7 +92,6 @@ function main(){
 			}
 			case 'square':{
 				console.log("baking rectangles at X:",initX," Y",initY, "tools", tool);
-
 				var getSqur = new fabric.Rect({
 					left: initX,
 					top: initY,
@@ -107,9 +119,9 @@ function main(){
 				break;
 			}
 			case 'freeline':{
+                canvas.isDrawingMode = true;
 				canvas.freeDrawingBrush.width = 3;
-				canvas.freeDrawingBrush.color=color;
-				canvas.isDrawingMode = true;
+                break;
 			}
 
 			case 'paste':{
@@ -119,6 +131,7 @@ function main(){
 					left:initX
 				})
 				canvas.add(clone);
+                break;
 			}
 		}
 	});
@@ -208,9 +221,11 @@ function main(){
 
 	canvas.observe('mouse:up',function(e){
 		// clear the selected object, clear initial start and end points.
+        console.log("hello");
 		selected = null;
 		initX = 0;
 		initY = 0;
+        //canvas.isDrawingMode = false;
 
 	});
 
