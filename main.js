@@ -9,7 +9,6 @@ function main(){
 	var color='black'
 	var pressed = false;
 	var initX,initY;
-	var state = 'create';
 	var selected = null;
 	var copied = null;
 	var copiedObjects = new Array();
@@ -20,6 +19,16 @@ function main(){
 
 	$(".mode").click(function(){
 		tool = $(this).attr('id');
+		//fix for jumping polygons
+		if(tool!=='polygon'){
+			mode = 'no mode';
+		}else{
+			mode ='add';
+		}
+		//debugging purposes
+
+		console.log(currentShape);
+
 		canvas.isDrawingMode = false;
 		if(tool ==='copy'){
 			//copied = canvas.getActiveObject();
@@ -327,13 +336,12 @@ fabric.util.addListener(window, 'keyup', function (e) {
 			currentShape.set({
 				selectable: true
 			});
-			currentShape._calcDimensions(false);
-			console.log(currentShape.getBoundingRect());
+			var tempLeft = currentShape.minX;
+			var tempTop = currentShape.minY;
+			currentShape._calcDimensions();
 			console.log(currentShape);
-			//currentShape.set({top:currentShape.minY,left:currentShape.minX});
-			//currentShape.set({top:currentShape.minY,left:currentShape.minX});
+			currentShape.set({top:tempTop,left:tempLeft});
 			currentShape.setCoords();
-			console.log(currentShape.getBoundingRect());
 		}
 		currentShape = null;
 	}
