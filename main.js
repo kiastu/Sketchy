@@ -12,9 +12,9 @@ function main(){
 	var state = 'create';
 	var selected = null;
 	var copied = null;
-    var copiedObjects = new Array();
-    var mode = "add",
-        currentShape;
+	var copiedObjects = new Array();
+	var mode = "add";
+	var currentShape;
 
 	canvas.clear();
 
@@ -23,58 +23,58 @@ function main(){
 		canvas.isDrawingMode = false;
 		if(tool ==='copy'){
 			//copied = canvas.getActiveObject();
-            if(canvas.getActiveGroup()){
-                for(var i in canvas.getActiveGroup().objects){
-                    var object = fabric.util.object.clone(canvas.getActiveGroup().objects[i]);
-                    console.log(object.top,object.left);
-                    object.set("top", object.top+5);
-                    object.set("left", object.left+5);
-                    copiedObjects[i] = object;
-                }
-            }
-            else if(canvas.getActiveObject()){
-                var object = fabric.util.object.clone(canvas.getActiveObject());
-                object.set("top", object.top);
-                object.set("left", object.left);
-                copied = object;
-                copiedObjects = new Array();
-            }
+			if(canvas.getActiveGroup()){
+				for(var i in canvas.getActiveGroup().objects){
+					var object = fabric.util.object.clone(canvas.getActiveGroup().objects[i]);
+					console.log(object.top,object.left);
+					object.set("top", object.top+5);
+					object.set("left", object.left+5);
+					copiedObjects[i] = object;
+				}
+			}
+			else if(canvas.getActiveObject()){
+				var object = fabric.util.object.clone(canvas.getActiveObject());
+				object.set("top", object.top);
+				object.set("left", object.left);
+				copied = object;
+				copiedObjects = new Array();
+			}
 		}
 		if(tool ==='cut'){
 			//copied = canvas.getActiveObject();
-            if(canvas.getActiveGroup()){
-                for(var i in canvas.getActiveGroup().objects){
-                    var object = fabric.util.object.clone(canvas.getActiveGroup().objects[i]);
-                    object.set("top", object.top+5);
-                    object.set("left", object.left+5);
-                    copiedObjects[i] = object;
-                }
-                var k = canvas.getActiveGroup().objects.length;
-                while(k){
-                    k = k - 1;
-                    canvas.remove(canvas.getActiveGroup().objects[k]);
-                }
-            }
-            else if(canvas.getActiveObject()){
-                var object = fabric.util.object.clone(canvas.getActiveObject());
-                object.set("top", object.top);
-                object.set("left", object.left);
-                copied = object;
-                copiedObjects = new Array();
-                canvas.remove(canvas.getActiveObject());
-                canvas.renderAll();
-            }
+			if(canvas.getActiveGroup()){
+				for(var i in canvas.getActiveGroup().objects){
+					var object = fabric.util.object.clone(canvas.getActiveGroup().objects[i]);
+					object.set("top", object.top+5);
+					object.set("left", object.left+5);
+					copiedObjects[i] = object;
+				}
+				var k = canvas.getActiveGroup().objects.length;
+				while(k){
+					k = k - 1;
+					canvas.remove(canvas.getActiveGroup().objects[k]);
+				}
+			}
+			else if(canvas.getActiveObject()){
+				var object = fabric.util.object.clone(canvas.getActiveObject());
+				object.set("top", object.top);
+				object.set("left", object.left);
+				copied = object;
+				copiedObjects = new Array();
+				canvas.remove(canvas.getActiveObject());
+				canvas.renderAll();
+			}
 
 		}
 	});
-	$(".color").click(function(){
-		color=$(this).attr('id');
-        canvas.freeDrawingBrush.color=color;
-		console.log("The Color selected is:", color);
-	});
-	$("#clear").click(function(){
-		canvas.clear();
-	});
+$(".color").click(function(){
+	color=$(this).attr('id');
+	canvas.freeDrawingBrush.color=color;
+	console.log("The Color selected is:", color);
+});
+$("#clear").click(function(){
+	canvas.clear();
+});
 	//mouse clicked downwards, begin tracking movement.
 	canvas.observe('mouse:down',function(options){
 		console.log('Tools',tool);
@@ -136,36 +136,35 @@ function main(){
 				break;
 			}
 			case 'polygon':{
-                var pos = canvas.getPointer(options.e);
-                if (mode === "add") {
-                    var polygon = new fabric.Polygon([{
-                        x: pos.x,
-                        y: pos.y
-                    }, {
-                        x: pos.x + 0.5,
-                        y: pos.y + 0.5
-                    }], {
-                        fill: 'blue',
-                        opacity: 0.5,
-                        selectable: false,
-                        originX: pos.x,
-                        originY: pos.y
-                    });
-                    currentShape = polygon;
-                    canvas.add(currentShape);
-                    mode = "edit";
-                } else if (mode === "edit" && currentShape && currentShape.type === "polygon") {
-                    var points = currentShape.get("points");
-                    points.push({
-                        x: pos.x - currentShape.get("left"),
-                        y: pos.y - currentShape.get("top")
-                    });
-                    currentShape.set({
-                        points: points
-                    });
-                    canvas.renderAll();
-                }
-                break;
+				var pos = canvas.getPointer(options.e);
+				if (mode === "add") {
+					console.log("Adding initial points");
+					var polygon = new fabric.Polygon([{
+						x: pos.x,
+						y: pos.y
+					}], {
+						fill: color,
+						opacity: 0.5,
+						selectable: false,
+						originX: pos.x,
+						originY: pos.y
+					});
+					currentShape = polygon;
+					canvas.add(currentShape);
+					mode = "edit";
+
+				} else if (mode === "edit" && currentShape) {
+					var points = currentShape.get("points");
+					points.push({
+						x: pos.x - currentShape.get("left"),
+						y: pos.y - currentShape.get("top")
+					});
+					currentShape.set({
+						points: points
+					});
+					canvas.renderAll();
+				}
+				break;
 			}
 			case 'straightline':{
 				var points = [initX, initY, initX, initY];
@@ -180,9 +179,9 @@ function main(){
 				break;
 			}
 			case 'freeline':{
-                canvas.isDrawingMode = true;
+				canvas.isDrawingMode = true;
 				canvas.freeDrawingBrush.width = 3;
-                break;
+				break;
 			}
 
 			case 'paste':{
@@ -192,27 +191,27 @@ function main(){
 				//	left:initX
 				//})
 				//canvas.add(clone);
-                if(copiedObjects.length > 0){
-                    for(var i in copiedObjects){
-                       // console.log(copiedObjects[i].top, copiedObjects[i].left);
-                        var clone = copiedObjects[i].clone()
-                        canvas.add(clone);
-                    }
-                }
-                else if(copied){
-                    copied.set({
-                        top:initY,
-                        left:initX
-                    })
-                    canvas.add(copied);
-                }
-                canvas.renderAll();
-                break;
+				if(copiedObjects.length > 0){
+					for(var i in copiedObjects){
+					   // console.log(copiedObjects[i].top, copiedObjects[i].left);
+					   var clone = copiedObjects[i].clone()
+					   canvas.add(clone);
+					 }
+					}
+					else if(copied){
+						copied.set({
+							top:initY,
+							left:initX
+						})
+						canvas.add(copied);
+					}
+					canvas.renderAll();
+					break;
+				}
 			}
-		}
-	});
+		});
 
-	canvas.observe('mouse:move',function(options){
+canvas.observe('mouse:move',function(options){
 		//modify the properties of the object currently creating.
 		var pointer = options.e;
 		var currentWidth = pointer.layerX - initX;
@@ -290,54 +289,51 @@ function main(){
 				canvas.renderAll();
 				break;
 			}
-            case 'polygon':{
-                var pos = canvas.getPointer(options.e);
-                if (mode === "edit" && currentShape) {
-                    var points = currentShape.get("points");
-                    points[points.length - 1].x = pos.x - currentShape.get("left");
-                    points[points.length - 1].y = pos.y - currentShape.get("top");
-                    currentShape.set({
-                        points: points
-                    });
-                    canvas.renderAll();
-                }
-                break;
-            }
+			case 'polygon':{
+				var pos = canvas.getPointer(options.e);
+				if (mode === "edit" && currentShape) {
+					var points = currentShape.get("points");
+					points[points.length - 1].x = pos.x - currentShape.get("left");
+					points[points.length - 1].y = pos.y - currentShape.get("top");
+					currentShape.set({
+						points: points
+					});
+					canvas.renderAll();
+				}
+				break;
+			}
 		}
 	});
 
-	canvas.observe('mouse:up',function(e){
+canvas.observe('mouse:up',function(e){
 		// clear the selected object, clear initial start and end points.
 		selected = null;
 		initX = 0;
 		initY = 0;
 	});
 
-    fabric.util.addListener(window, 'keyup', function (e) {
-        if (e.keyCode === 27) {
-            if (mode === 'edit' || mode === 'add') {
-                mode = 'normal';
-                currentShape.set({
-                    selectable: true
-                });
-                currentShape._calcDimensions(false);
-                var minX = 0,
-                    minY = 0,
-                    maxX = 0,
-                    maxY = 0;
-                for (var i = 0; i < currentShape.points.length; i++) {
-                    minX = Math.min(minX, currentShape.points[i].x);
-                    minY = Math.min(minY, currentShape.points[i].y);
-                    maxX = Math.max(maxX, currentShape.points[i].x);
-                    maxY = Math.max(maxY, currentShape.points[i].y);
-                }
-                currentShape.setCoords();
-                //canvas.restore();
-            } else {
-                mode = 'add';
-            }
-            currentShape = null;
-        }
-    })
+fabric.util.addListener(window, 'keyup', function (e) {
+	if (e.keyCode === 27) {
+		if (mode === 'edit') {
+			mode = 'add';
+			currentShape.set({
+				selectable: true
+			});
+			currentShape._calcDimensions(false);
+			var minX = 0,
+			minY = 0,
+			maxX = 0,
+			maxY = 0;
+			for (var i = 0; i < currentShape.points.length; i++) {
+				minX = Math.min(minX, currentShape.points[i].x);
+				minY = Math.min(minY, currentShape.points[i].y);
+				maxX = Math.max(maxX, currentShape.points[i].x);
+				maxY = Math.max(maxY, currentShape.points[i].y);
+			}
+			currentShape.setCoords();
+		}
+		currentShape = null;
+	}
+})
 
 }
